@@ -1,0 +1,14 @@
+{
+  "league": "Rates 2026 - 2027",
+  "snapshot_date": "2026-08-18",
+  "initial_budget_eur": 150000000,
+  "initial_players": 15,
+  "max_players": 22,
+  "market_players_per_day": 12,
+  "sell_lock_days": 3,
+  "notes": [
+    "Visible net spend is reconstructed from screenshots supplied for 9-18 Aug 2026.",
+    "Liquidity index is relative, not an exact cash balance.",
+    "All teams currently have 0 fantasy points in the supplied standings snapshot."
+  ]
+}
