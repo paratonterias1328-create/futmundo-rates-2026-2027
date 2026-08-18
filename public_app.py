@@ -10,13 +10,13 @@ econ = pd.read_csv(ROOT / "data" / "team_economy.csv")
 
 st.set_page_config(page_title="Futmondo · Liga", page_icon="🏆", layout="wide")
 st.title("🏆 Rates 2026–2027")
-st.caption("Dashboard público de la liga")
+st.caption("Dashboard per entendre més de la competi")
 
 latest = scores.sort_values("round").groupby("team", as_index=False).tail(1)
 latest = latest.sort_values(["total_points","team"], ascending=[False, True])
 
 c1, c2, c3 = st.columns(3)
-c1.metric("Participantes", latest["team"].nunique())
+c1.metric("Participants", latest["team"].nunique())
 c2.metric("Jornada actual", int(scores["round"].max()))
 leader = latest.iloc[0]["team"] if len(latest) else "—"
 c3.metric("Líder", leader)
@@ -25,7 +25,7 @@ st.subheader("Clasificación")
 rank = latest[["team","total_points"]].copy()
 rank.insert(0, "Pos.", range(1, len(rank)+1))
 rank.columns = ["Pos.","Equipo","Puntos"]
-st.dataframe(rank, use_container_width=True, hide_index=True)
+st.dataframe(rank, use_container_width=100, hide_index=True)
 
 st.subheader("Progreso de puntos acumulados")
 fig = px.line(
