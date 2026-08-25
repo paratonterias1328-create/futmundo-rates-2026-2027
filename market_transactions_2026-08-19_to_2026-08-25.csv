@@ -1,0 +1,75 @@
+date,player,seller,buyer,amount_eur,type
+2026-08-19,Butland,Feldespats FC,Futmondo,816188,sale_to_market
+2026-08-19,Martinelli,JBSNI63 FC,Futmondo,21368540,sale_to_market
+2026-08-19,Baleba,JBSNI63 FC,Feldespats FC,10250000,user_transfer
+2026-08-19,Meunier,LeTaxet,Futmondo,1115487,sale_to_market
+2026-08-19,Willock,LeTaxet,Futmondo,3045691,sale_to_market
+2026-08-19,Darlow,MANELUNITED FC,Futmondo,1066166,sale_to_market
+2026-08-19,Matheus Nunes,Futmondo,Valak Town,28679646,buy_from_market
+2026-08-19,Palmer,Futmondo,JBSNI63 FC,87888888,buy_from_market
+2026-08-19,Romain Esse,Futmondo,Valak Town,8750947,buy_from_market
+2026-08-19,Gyökeres,Futmondo,Urilove FC,55555566,buy_from_market
+2026-08-19,Khalaili,Futmondo,Feldespats FC,23825605,buy_from_market
+2026-08-20,Ellis Simms,LeTaxet,Futmondo,7731534,sale_to_market
+2026-08-20,Josh Eccles,Feldespats FC,Futmondo,8118441,sale_to_market
+2026-08-20,Ryan Yates,Futmondo,JBSNI63 FC,3788885,buy_from_market
+2026-08-20,Yirienkyi,Futmondo,Enric G,16535888,buy_from_market
+2026-08-20,Murillo,Futmondo,Feldespats FC,18528685,buy_from_market
+2026-08-20,Haaland,Futmondo,naref25,125000888,buy_from_market
+2026-08-20,Brooks,Futmondo,Enric G,2194204,buy_from_market
+2026-08-20,Neco Williams,Futmondo,Enric G,33558589,buy_from_market
+2026-08-21,Reijnders,LeTaxet,Futmondo,32113336,sale_to_market
+2026-08-21,Phillips,Urilove FC,Futmondo,1013749,sale_to_market
+2026-08-21,Wharton,Futmondo,Feldespats FC,37852865,buy_from_market
+2026-08-21,Meunier,Futmondo,Pau Ragnar 11,1100076,buy_from_market
+2026-08-21,Sarr,Futmondo,Rupert F.C,31833333,buy_from_market
+2026-08-21,Tavernier,Futmondo,Enric G,32548888,buy_from_market
+2026-08-21,Gakpo,Futmondo,Valak Town,39673346,buy_from_market
+2026-08-21,Joshua King,Futmondo,JBSNI63 FC,11818115,buy_from_market
+2026-08-21,Cuenca,Futmondo,Pau Ragnar 11,1100187,buy_from_market
+2026-08-21,Diomande,Futmondo,Feldespats FC,27856282,buy_from_market
+2026-08-21,Tammy Abraham,Pau Ragnar 11,Futmondo,8423049,sale_to_market
+2026-08-21,Hincapié,JBSNI63 FC,Futmondo,24109101,sale_to_market
+2026-08-21,Haji Wright,Rupert F.C,Futmondo,10962503,sale_to_market
+2026-08-21,Mainoo,Feldespats FC,Futmondo,13629293,sale_to_market
+2026-08-21,Delap,naref25,Futmondo,6802330,sale_to_market
+2026-08-21,Struijk,naref25,Futmondo,10953633,sale_to_market
+2026-08-21,Joelinton,naref25,Futmondo,15612010,sale_to_market
+2026-08-21,Bamba,LeTaxet,Urilove FC,13452453,user_transfer
+2026-08-21,Petrovic,Urilove FC,LeTaxet,13200000,user_transfer
+2026-08-21,Diogo Dalot,Feldespats FC,Urilove FC,750000,loan_fee
+2026-08-21,B. Johnson,Feldespats FC,Futmondo,6105846,sale_to_market
+2026-08-21,N. Domínguez,Feldespats FC,Futmondo,11255345,sale_to_market
+2026-08-21,Amadou Onana,Feldespats FC,Futmondo,17826876,sale_to_market
+2026-08-21,McAteer,Enric G,Futmondo,6536516,sale_to_market
+2026-08-22,Nedeljkovic,LeTaxet,Futmondo,4482527,sale_to_market
+2026-08-22,Joao Pedro,Futmondo,Enric G,72221855,buy_from_market
+2026-08-22,Guessand,Futmondo,Pau Ragnar 11,6459578,buy_from_market
+2026-08-22,Iliman Ndiaye,Futmondo,Pau Ragnar 11,40004646,buy_from_market
+2026-08-23,Kenny Tete,MANELUNITED FC,Futmondo,12898296,sale_to_market
+2026-08-23,Gyökeres,Urilove FC,Futmondo,56738699,sale_to_market
+2026-08-23,Smith Rowe,Hammers,Futmondo,10517933,sale_to_market
+2026-08-23,Lavia,Futmondo,Hammers,7722000,buy_from_market
+2026-08-23,Victor Torp,Futmondo,Valak Town,7876040,buy_from_market
+2026-08-23,Elanga,Futmondo,Hammers,13722000,buy_from_market
+2026-08-23,George,Futmondo,Hammers,8122000,buy_from_market
+2026-08-23,Mateta,Futmondo,Urilove FC,23586542,buy_from_market
+2026-08-23,Kroupi,Futmondo,Urilove FC,14586541,buy_from_market
+2026-08-24,Dibling,Pau Ragnar 11,Futmondo,10592654,sale_to_market
+2026-08-24,Livramento,naref25,Futmondo,11424369,sale_to_market
+2026-08-24,Mingueza,Pau Ragnar 11,Futmondo,7768183,sale_to_market
+2026-08-24,Azmou,Urilove FC,Futmondo,2674705,sale_to_market
+2026-08-24,Bukayo Saka,Futmondo,Valak Town,102576466,buy_from_market
+2026-08-24,Millar,Futmondo,JBSNI63 FC,2818458,buy_from_market
+2026-08-24,Watkins,Futmondo,Rupert F.C,44283333,buy_from_market
+2026-08-25,Bentancur,Valak Town,Futmondo,7674225,sale_to_market
+2026-08-25,Romain Esse,Valak Town,Futmondo,8384142,sale_to_market
+2026-08-25,Jacob Murphy,Valak Town,Futmondo,7237239,sale_to_market
+2026-08-25,Kadioglu,Valak Town,Futmondo,18334191,sale_to_market
+2026-08-25,Woltemade,Valak Town,Futmondo,25852748,sale_to_market
+2026-08-25,D. Burn,LeTaxet,Futmondo,11463261,sale_to_market
+2026-08-25,Igor Jesús,Futmondo,naref25,21587848,buy_from_market
+2026-08-25,Tarkowski,Futmondo,LeTaxet,31457578,buy_from_market
+2026-08-25,Diop,Futmondo,Pau Ragnar 11,1700406,buy_from_market
+2026-08-25,Hackney,Futmondo,Feldespats FC,19826252,buy_from_market
+2026-08-25,Okafor,Hammers,Futmondo,9812673,sale_to_market
