@@ -253,65 +253,97 @@ const fmt0 = n => n.toLocaleString('es-ES');
 
 function computeStats(data){
   if(!data.length) return null;
-  let maxEntry = null; // {player,jornada,points}
-  let totalsByPlayer = {}; PARTICIPANTS.forEach(p=>totalsByPlayer[p]=0);
-  let over100 = {}; PARTICIPANTS.forEach(p=>over100[p]=0);
-  let jornadaWinners = {};
-
-  data.forEach(({jornada,scores})=>{
-    let best=null, bestScore=-Infinity;
-    Object.entries(scores).forEach(([player,pts])=>{
-      totalsByPlayer[player]+=pts;
-      if(pts>=100) over100[player]++;
-      if(!maxEntry || pts>maxEntry.points) maxEntry = {player,jornada,points:pts};
-      if(pts>bestScore){bestScore=pts;best=player;}
-    });
-    jornadaWinners[jornada] = best;
+  const totalsByPlayer={}, over100={}, below45={}, winCounts={}, leaderCounts={}, podiumCounts={}, redZoneCounts={}, pointsByPlayer={};
+  PARTICIPANTS.forEach(p=>{
+    totalsByPlayer[p]=0; over100[p]=0; below45[p]=0; winCounts[p]=0; leaderCounts[p]=0;
+    podiumCounts[p]=0; redZoneCounts[p]=0; pointsByPlayer[p]=[];
   });
 
-  const mostOver100 = Object.entries(over100).sort((a,b)=>b[1]-a[1])[0];
-  const leaderNow = Object.entries(totalsByPlayer).sort((a,b)=>b[1]-a[1])[0];
-  const winCounts = {}; PARTICIPANTS.forEach(p=>winCounts[p]=0);
-  Object.values(jornadaWinners).forEach(w=>winCounts[w]++);
-  const mostJornadaWins = Object.entries(winCounts).sort((a,b)=>b[1]-a[1])[0];
+  let maxEntry=null, maxLeaderGap=null, maxJornadaGap=null, maxH2H=null;
 
-  return {maxEntry, totalsByPlayer, over100, mostOver100, leaderNow, mostJornadaWins, jornadas: data.length};
+  data.forEach(({jornada,scores})=>{
+    const roundRows = PARTICIPANTS.map(player=>({player,pts:Number(scores[player]??0)})).sort((a,b)=>b.pts-a.pts);
+
+    roundRows.forEach(({player,pts})=>{
+      totalsByPlayer[player]+=pts;
+      pointsByPlayer[player].push(pts);
+      if(pts>=100) over100[player]++;
+      if(pts<45) below45[player]++;
+      if(!maxEntry || pts>maxEntry.points) maxEntry={player,jornada,points:pts};
+    });
+
+    const bestRound=roundRows[0].pts;
+    roundRows.filter(r=>r.pts===bestRound).forEach(r=>winCounts[r.player]++);
+
+    const jGap=roundRows[0].pts-roundRows[1].pts;
+    if(!maxJornadaGap || jGap>maxJornadaGap.gap){
+      maxJornadaGap={jornada,winner:roundRows[0].player,second:roundRows[1].player,gap:jGap};
+    }
+
+    const top=roundRows[0], bottom=roundRows[roundRows.length-1];
+    const hGap=top.pts-bottom.pts;
+    if(!maxH2H || hGap>maxH2H.gap){
+      maxH2H={jornada,winner:top.player,loser:bottom.player,gap:hGap};
+    }
+
+    const cumulativeRows=PARTICIPANTS.map(player=>({player,total:totalsByPlayer[player]})).sort((a,b)=>b.total-a.total);
+    const leaderTotal=cumulativeRows[0].total;
+    cumulativeRows.filter(r=>r.total===leaderTotal).forEach(r=>leaderCounts[r.player]++);
+    cumulativeRows.slice(0,3).forEach(r=>podiumCounts[r.player]++);
+    cumulativeRows.slice(-3).forEach(r=>redZoneCounts[r.player]++);
+
+    const lGap=cumulativeRows[0].total-cumulativeRows[1].total;
+    if(!maxLeaderGap || lGap>maxLeaderGap.gap){
+      maxLeaderGap={jornada,leader:cumulativeRows[0].player,second:cumulativeRows[1].player,gap:lGap};
+    }
+  });
+
+  const leaderNow=Object.entries(totalsByPlayer).sort((a,b)=>b[1]-a[1])[0];
+  const mostOver100=Object.entries(over100).sort((a,b)=>b[1]-a[1])[0];
+  const mostJornadaWins=Object.entries(winCounts).sort((a,b)=>b[1]-a[1])[0];
+  const mostLeaderRounds=Object.entries(leaderCounts).sort((a,b)=>b[1]-a[1])[0];
+  const mostPodiums=Object.entries(podiumCounts).sort((a,b)=>b[1]-a[1])[0];
+  const mostRedZone=Object.entries(redZoneCounts).sort((a,b)=>b[1]-a[1])[0];
+  const mostBelow45=Object.entries(below45).sort((a,b)=>b[1]-a[1])[0];
+
+  const averages={}, stds={};
+  PARTICIPANTS.forEach(p=>{
+    const pts=pointsByPlayer[p];
+    averages[p]=pts.reduce((a,b)=>a+b,0)/pts.length;
+    stds[p]=pts.length>=2 ? stdDev(pts) : null;
+  });
+
+  const bestAverage=Object.entries(averages).sort((a,b)=>b[1]-a[1])[0];
+  const regs=Object.entries(stds).filter(([,v])=>v!==null).sort((a,b)=>a[1]-b[1]);
+  const mostRegular=regs.length?regs[0]:null;
+
+  return {maxEntry,leaderNow,mostOver100,mostJornadaWins,mostLeaderRounds,maxLeaderGap,maxJornadaGap,maxH2H,mostPodiums,mostRedZone,mostRegular,bestAverage,mostBelow45,jornadas:data.length};
 }
 
 function renderStats(){
-  const data = currentData();
-  const stats = computeStats(data);
-  const box = document.getElementById('statsRow');
+  const data=currentData();
+  const stats=computeStats(data);
+  const box=document.getElementById('statsRow');
+
   if(!stats){
-    box.innerHTML = `
-      <div class="stat-box"><div class="label">Jornada más alta</div><div class="value">—</div><div class="sub">pendiente de datos</div></div>
-      <div class="stat-box"><div class="label">Líder actual</div><div class="value">—</div><div class="sub">pendiente de datos</div></div>
-      <div class="stat-box"><div class="label">Más veces +100 pts</div><div class="value">—</div><div class="sub">pendiente de datos</div></div>
-      <div class="stat-box"><div class="label">Más jornadas ganadas</div><div class="value">—</div><div class="sub">pendiente de datos</div></div>
-    `;
+    box.innerHTML='<div class="stat-box"><div class="label">Sin datos</div><div class="value">—</div><div class="sub">pendiente de jornadas</div></div>';
     return;
   }
-  box.innerHTML = `
-    <div class="stat-box">
-      <div class="label">Puntuación más alta</div>
-      <div class="value gold">${stats.maxEntry.points} pts</div>
-      <div class="sub">${stats.maxEntry.player} · jornada ${stats.maxEntry.jornada}</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Líder acumulado</div>
-      <div class="value">${stats.leaderNow[0]}</div>
-      <div class="sub">${fmt0(stats.leaderNow[1])} pts en ${stats.jornadas} jornadas</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Más veces +100 pts</div>
-      <div class="value">${stats.mostOver100[1] > 0 ? stats.mostOver100[0] : '—'}</div>
-      <div class="sub">${stats.mostOver100[1]} jornada${stats.mostOver100[1]!==1?'s':''}</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Más jornadas ganadas</div>
-      <div class="value">${stats.mostJornadaWins[0]}</div>
-      <div class="sub">${stats.mostJornadaWins[1]} de ${stats.jornadas}</div>
-    </div>
+
+  box.innerHTML=`
+    <div class="stat-box"><div class="label">Puntuación más alta</div><div class="value gold">${stats.maxEntry.points} pts</div><div class="sub">${stats.maxEntry.player} · J${stats.maxEntry.jornada}</div></div>
+    <div class="stat-box"><div class="label">Líder acumulado</div><div class="value">${stats.leaderNow[0]}</div><div class="sub">${fmt0(stats.leaderNow[1])} pts</div></div>
+    <div class="stat-box"><div class="label">Más jornadas como líder</div><div class="value">${stats.mostLeaderRounds[0]}</div><div class="sub">${stats.mostLeaderRounds[1]} jornadas</div></div>
+    <div class="stat-box"><div class="label">Mayor ventaja del líder</div><div class="value gold">+${stats.maxLeaderGap.gap} pts</div><div class="sub">${stats.maxLeaderGap.leader} sobre ${stats.maxLeaderGap.second} · J${stats.maxLeaderGap.jornada}</div></div>
+    <div class="stat-box"><div class="label">Más jornadas ganadas</div><div class="value">${stats.mostJornadaWins[0]}</div><div class="sub">${stats.mostJornadaWins[1]} de ${stats.jornadas}</div></div>
+    <div class="stat-box"><div class="label">Mayor diferencia de jornada</div><div class="value gold">+${stats.maxJornadaGap.gap} pts</div><div class="sub">${stats.maxJornadaGap.winner} sobre ${stats.maxJornadaGap.second} · J${stats.maxJornadaGap.jornada}</div></div>
+    <div class="stat-box"><div class="label">Mayor paliza H2H</div><div class="value gold">+${stats.maxH2H.gap} pts</div><div class="sub">${stats.maxH2H.winner} vs ${stats.maxH2H.loser} · J${stats.maxH2H.jornada}</div></div>
+    <div class="stat-box"><div class="label">Más veces en el podio</div><div class="value">${stats.mostPodiums[0]}</div><div class="sub">${stats.mostPodiums[1]} jornadas en top 3</div></div>
+    <div class="stat-box"><div class="label">Más veces en zona roja</div><div class="value">${stats.mostRedZone[0]}</div><div class="sub">${stats.mostRedZone[1]} jornadas entre los últimos 3</div></div>
+    <div class="stat-box"><div class="label">Más regular</div><div class="value">${stats.mostRegular?stats.mostRegular[0]:'—'}</div><div class="sub">${stats.mostRegular?'σ = '+stats.mostRegular[1].toFixed(1)+' pts':'necesita ≥2 jornadas'}</div></div>
+    <div class="stat-box"><div class="label">Mejor media de puntos</div><div class="value">${stats.bestAverage[0]}</div><div class="sub">${stats.bestAverage[1].toFixed(1)} pts/jornada</div></div>
+    <div class="stat-box"><div class="label">Más jornadas &lt;45 pts</div><div class="value">${stats.mostBelow45[1]>0?stats.mostBelow45[0]:'—'}</div><div class="sub">${stats.mostBelow45[1]} jornadas</div></div>
+    <div class="stat-box"><div class="label">Más veces +100 pts</div><div class="value">${stats.mostOver100[1]>0?stats.mostOver100[0]:'—'}</div><div class="sub">${stats.mostOver100[1]} jornadas</div></div>
   `;
 }
 
